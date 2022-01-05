@@ -60,15 +60,6 @@ class StudentCrudController extends CrudController
     {
         CRUD::setValidation(StudentRequest::class);
 
-        
-        CRUD::addField([
-            'label' => 'Profile Image',
-            'name' => 'image',
-            'type' => 'image',
-            'aspect_ratio' => 0
-        ]);
-        
-
         CRUD::field('name');
         CRUD::field('class_room_id')
             ->type('select')->model('App\Models\ClassRoom')
