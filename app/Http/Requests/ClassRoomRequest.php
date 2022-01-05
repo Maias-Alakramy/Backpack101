@@ -26,7 +26,7 @@ class ClassRoomRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'number' => 'required|integer|unique:class_rooms'
         ];
     }
 

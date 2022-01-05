@@ -40,8 +40,8 @@ class StudentCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::column('name');
-        CRUD::column('image');
-        CRUD::column('class_room_id');
+        CRUD::column('classRoom');
+
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -60,9 +60,20 @@ class StudentCrudController extends CrudController
     {
         CRUD::setValidation(StudentRequest::class);
 
+        
+        CRUD::addField([
+            'label' => 'Profile Image',
+            'name' => 'image',
+            'type' => 'image',
+            'aspect_ratio' => 0
+        ]);
+        
+
         CRUD::field('name');
-        CRUD::field('image');
-        CRUD::field('class_room_id');
+        CRUD::field('class_room_id')
+            ->type('select')->model('App\Models\ClassRoom')
+            ->attribute('number')->label('Class Room')
+            ->entity('classRoom');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
@@ -81,4 +92,5 @@ class StudentCrudController extends CrudController
     {
         $this->setupCreateOperation();
     }
+
 }

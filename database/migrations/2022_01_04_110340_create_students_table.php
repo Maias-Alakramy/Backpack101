@@ -18,7 +18,7 @@ class CreateStudentsTable extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('image');
+            $table->string('image')->default("path");
             $table->foreignId('class_room_id')->constrained();
             $table->timestamps();
         });
