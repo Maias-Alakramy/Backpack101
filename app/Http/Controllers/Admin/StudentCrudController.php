@@ -118,34 +118,6 @@ class StudentCrudController extends CrudController
           });
     }
 
-    private function myHash1($value)
-    {
-        $h = 0;
-        for ($i = 0; $i < strlen($value); $i++) {
-            $h += $i*ord($value[$i]);
-            $h %= 1009;
-        }
-        return $h+1;
-    }
-    private function myHash2($value)
-    {
-        $h = 0;
-        for ($i = 0; $i < strlen($value); $i++) {
-            $h += 5*$i*ord($value[$i]);
-            $h %= 2003;
-        }
-        return $h+1;
-    }
-    private function myHash3($value)
-    {
-        $h = 0;
-        for ($i = 0; $i < strlen($value); $i++) {
-            $h += 3*$i*ord($value[$i]);
-            $h %= 2503;
-        }
-        return $h+1;
-    }
-
     //override the CRUD create function
     public function store(StudentRequest $request)
     {
@@ -153,22 +125,12 @@ class StudentCrudController extends CrudController
         $student = new \App\Models\Student();
         $student->name = $request->name;
         $student->class_room_id = $request->class_room_id;
-        $hash = $this->myHash1($request->name);
-        if ($model->where('code', $hash)->count() > 0) {
-            $hash = $this->myHash2($request->name);
-            if($model->where('code', $hash)->count() > 0){
-                $hash = $this->myHash3($request->name);
-                if($model->where('code', $hash)->count() > 0){
-                    $hash = $this->myHash1($request->name) + $this->myHash2($request->name) + $this->myHash3($request->name);
-                    $hash %= 2503;
-                    if($model->where('code', $hash)->count() > 0){
-                        $hash = 0;
-                    }
-                }
-            }
+        $class = \App\Models\ClassRoom::find($request->class_room_id)->number;
+        $code = pow(10,(strlen((string)($model->count()*10))))*$class+rand(0, $model->count()*10);
+        while($model->where('code', $code)->count() > 0) {
+            $code = pow(10,(strlen((string)($model->count()*10))))*$class+rand(0, $model->count()*10);
         }
-        
-        $student->code = $hash;
+        $student->code = $code;
 
         $student->save();
         return redirect('/admin/student');
