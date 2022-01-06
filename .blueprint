@@ -1,10 +1,8 @@
 created:
-    - database/factories/ClassRoomFactory.php
-    - database/factories/StudentFactory.php
-    - database/migrations/2022_01_04_110339_create_class_rooms_table.php
-    - database/migrations/2022_01_04_110340_create_students_table.php
-    - app/Models/ClassRoom.php
-    - app/Models/Student.php
+    - app/Http/Controllers/StudentController.php
+    - tests/Feature/Http/Controllers/StudentControllerTest.php
+updated:
+    - routes/web.php
 models:
     User: {  }
     ClassRoom: { number: integer, relationships: { hasMany: Student } }

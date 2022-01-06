@@ -1,10 +1,17 @@
-models:
-  ClassRoom:
-    number: integer
-    relationships:
-      hasMany: Student
-  
+controllers:
   Student:
-    name: string
-    image: string
-    class_room_id: id foreign:class_rooms
+    index:
+      query: all
+    show:
+      query: all:classRooms
+      
+# models:
+#   ClassRoom:
+#     number: integer
+#     relationships:
+#       hasMany: Student
+  
+#   Student:
+#     name: string
+#     image: string
+#     class_room_id: id foreign:class_rooms
