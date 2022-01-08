@@ -16,6 +16,7 @@ class Student extends Model
     public static function boot()
     {
         parent::boot();
+
         static::deleting(function($obj) {
             Storage::delete(Str::replaceFirst('storage/','public/', $obj->image));
         });
@@ -46,27 +47,37 @@ class Student extends Model
     {
         return $this->belongsTo(ClassRoom::class);
     }
-/*
-    public function setImageAttribute($value) {
 
-        $image=$value;
-        $input['image'] = $image->getClientOriginalName();
-        $img = \Image::make($image->getRealPath());
+    // public function setcodeAttribute($value)
+    // {
+    //     $max_rand = 1000000000;
+        
+    //     do
+    //         $code = $max_rand*$this->class+rand(0, $max_rand);
+    //     while($model->where('code', $code)->count() > 0);
+    //     $this->attributes['code'] = $code;
+    // }
 
-        $destinationPath = public_path('/Images');
-        $img->resize(750, 450, function ($constraint) {
-        $constraint->aspectRatio();
-        })->save($destinationPath.'/'.$input['image']);
+    // public function setImageAttribute($value) {
 
-        $destinationPath = public_path('/uploads/Images');
+    //     $image=$value;
+    //     $input['image'] = $image->getClientOriginalName();
+    //     $img = \Image::make($image->getRealPath());
 
-        $img->resize(100, 100, function ($constraint) {
-        $constraint->aspectRatio();
-        })->save($destinationPath.'/'.$input['image']);
+    //     $destinationPath = public_path('/Images');
+    //     $img->resize(750, 450, function ($constraint) {
+    //     $constraint->aspectRatio();
+    //     })->save($destinationPath.'/'.$input['image']);
 
-        $image->move($destinationPath, $input['image']);
-        $this->attributes['image'] = $input['image'];
+    //     $destinationPath = public_path('/uploads/Images');
 
-    }
-*/
+    //     $img->resize(100, 100, function ($constraint) {
+    //     $constraint->aspectRatio();
+    //     })->save($destinationPath.'/'.$input['image']);
+
+    //     $image->move($destinationPath, $input['image']);
+    //     $this->attributes['image'] = $input['image'];
+
+    // }
+
 }

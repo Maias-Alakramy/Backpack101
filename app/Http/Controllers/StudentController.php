@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ClassRoom;
 use App\Models\Student;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -15,14 +16,31 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
+        // if you want to change what happens when validation fails, you can do it here
+
+        // $validator = Validator::make($request->all(), [
+        //     'class' => 'integer|exists:App\Models\classRoom,number'
+        // ]);
+        // if ($validator->fails())
+        //     return response()->json('Class not found', 404);
+
+        $request->validate([
+            'class' => 'integer|exists:App\Models\classRoom,number'
+        ]);
         $class_room = $request->query('class');
-        $studentsQuary = DB::table('students');
+        $name = $request->query('name');
+
+        $students = Student::with('classRoom')
+            ->when($name, function ($query) use ($name) {
+                return $query->where('name', 'like', '%' . $name . '%');
+            })
+            ->get();
+
         if($class_room)
         {
-            $class_room_id = ClassRoom::where('number' ,'=', $class_room)->firstorfail()->id;
-            $studentsQuary->where('class_room_id', $class_room_id);
+            $students = $students->where('classRoom.number', '=', $class_room);
         }
-        $students = $studentsQuary->get();
+
         return response()->json($students, 200);
     }
 
@@ -46,17 +64,5 @@ class StudentController extends Controller
         }catch(Exception $e){
             return response()->json(["message"=>"Internal Server Error"], 500);
         }
-    }
-    
-    //serach by name
-    public function search(Request $request)
-    {
-        $name = $request->query('name');
-        if($name)
-        {
-            $students = student::where('name', 'like', '%'.$name.'%')->get();
-            return response()->json($students, 200);
-        }
-        return response()->json('hell', 200);
     }
 }

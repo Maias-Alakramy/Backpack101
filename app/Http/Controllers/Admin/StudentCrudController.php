@@ -127,16 +127,10 @@ class StudentCrudController extends CrudController
         $student->class_room_id = $request->class_room_id;
         $class = \App\Models\ClassRoom::find($request->class_room_id)->number;
         
-        if($model->count < 1000)
-        {
-            $log_pwr = 1000;
-            $max_rand = 1000;
-        }else{
-            $log_pwr = pow(10,(strlen((string)($model->count()*10))));
-            $max_rand = $model->count;
-        }
+        $max_rand = 1000000000;
+
         do
-            $code = $log_pwr*$class+rand(0, $max_rand);
+            $code = $max_rand*$class+rand(0, $max_rand);
         while($model->where('code', $code)->count() > 0);
         $student->code = $code;
 

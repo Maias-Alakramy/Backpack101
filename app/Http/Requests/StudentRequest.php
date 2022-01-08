@@ -27,8 +27,7 @@ class StudentRequest extends FormRequest
     {
         return [
             'name' => 'required|min:2|max:255',
-            //'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'class_room_id' => 'required|integer'
+            'class_room_id' => 'required|integer|exists:App\Models\classRoom,id'
         ];
     }
 

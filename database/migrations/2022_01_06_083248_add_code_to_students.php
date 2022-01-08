@@ -14,7 +14,7 @@ class AddCodeToStudents extends Migration
     public function up()
     {
         Schema::table('students', function (Blueprint $table) {
-            $table->integer('code')->uniqid();
+            $table->bigInteger('code')->uniqid();
         });
     }
 

@@ -26,7 +26,7 @@ class ClassRoomRequest extends FormRequest
     public function rules()
     {
         return [
-            'number' => 'required|integer|unique:class_rooms'
+            'number' => 'required|numeric|unique:class_rooms,number,'.$this->id,
         ];
     }
 
