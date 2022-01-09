@@ -77,7 +77,7 @@ class StudentCrudController extends CrudController
                 'crop' => true, // set to true to allow cropping, false to disable
                 'aspect_ratio' => 1,
         ]);
-        CRUD::field('code')->type('hidden')->value(1);
+        
         
 
         /**
@@ -127,5 +127,23 @@ class StudentCrudController extends CrudController
                   $this->crud->addClause('where', 'code', '<=', (float) $range->to);
               }
           });
+    }
+    public function store(StudentRequest $request)
+    {
+        $model = \App\Models\Student::all();
+        $student = new \App\Models\Student();
+        $class = \App\Models\ClassRoom::find($request->class_room_id)->number;
+        
+        $max_rand = 1000000000;
+
+        do
+            $code = $max_rand*$class+rand(0, $max_rand);
+        while($model->where('code', $code)->count() > 0);
+
+        $this->crud->setOperationSetting('saveAllInputsExcept',
+            ['_token', '_method', 'http_referrer', 'current_tab', 'save_action']);
+        $this->crud->getRequest()->request->add(['code' => $code]);		
+            
+        return $this->traitStore();
     }
 }
