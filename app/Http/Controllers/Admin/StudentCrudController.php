@@ -14,7 +14,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 class StudentCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\BulkDeleteOperation;
@@ -43,6 +43,8 @@ class StudentCrudController extends CrudController
         CRUD::column('code');
         CRUD::column('name');
         CRUD::column('classRoom');
+        CRUD::column('image')->type('image');
+
 
         $this->addCustomCrudFilters();
 
@@ -68,6 +70,15 @@ class StudentCrudController extends CrudController
             ->type('select')->model('App\Models\ClassRoom')
             ->attribute('number')->label('Class Room')
             ->entity('classRoom');
+        CRUD::addField([
+                'label' => "Profile Image",
+                'name' => "image",
+                'type' => 'image',
+                'crop' => true, // set to true to allow cropping, false to disable
+                'aspect_ratio' => 1,
+        ]);
+        CRUD::field('code')->type('hidden')->value(1);
+        
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
@@ -116,25 +127,5 @@ class StudentCrudController extends CrudController
                   $this->crud->addClause('where', 'code', '<=', (float) $range->to);
               }
           });
-    }
-
-    //override the CRUD create function
-    public function store(StudentRequest $request)
-    {
-        $model = \App\Models\Student::all();
-        $student = new \App\Models\Student();
-        $student->name = $request->name;
-        $student->class_room_id = $request->class_room_id;
-        $class = \App\Models\ClassRoom::find($request->class_room_id)->number;
-        
-        $max_rand = 1000000000;
-
-        do
-            $code = $max_rand*$class+rand(0, $max_rand);
-        while($model->where('code', $code)->count() > 0);
-        $student->code = $code;
-
-        $student->save();
-        return redirect('/admin/student');
     }
 }

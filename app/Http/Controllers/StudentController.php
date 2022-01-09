@@ -30,17 +30,26 @@ class StudentController extends Controller
         $class_room = $request->query('class');
         $name = $request->query('name');
 
-        $students = Student::with('classRoom')
-            ->when($name, function ($query) use ($name) {
-                return $query->where('name', 'like', '%' . $name . '%');
-            })
-            ->get();
+        $offset = $request->query('offset');
+        $limit = $request->query('limit');
 
+        $studentsQuary = DB::table('students')
+            ->join('class_rooms', 'class_rooms.id', '=', 'students.class_room_id')
+            ->select('students.*', 'class_rooms.number');
+        
         if($class_room)
         {
-            $students = $students->where('classRoom.number', '=', $class_room);
+            $studentsQuary->where('number', '=', $class_room);
         }
-
+        if($name)
+        {
+            $studentsQuary->where('name', 'like', '%' . $name . '%');
+        }
+        if($offset && $limit)
+        {
+            $studentsQuary->offset($offset)->limit($limit);
+        }
+        $students = $studentsQuary->get();
         return response()->json($students, 200);
     }
 
