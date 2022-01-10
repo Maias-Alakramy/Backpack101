@@ -47,21 +47,6 @@ class Student extends Model
         return $this->belongsTo(ClassRoom::class);
     }
 
-    // public function setCodeAttribute($value)
-    // {
-    //     $model = \App\Models\Student::all();
-    //     $student = new \App\Models\Student();
-    //     $class = \App\Models\ClassRoom::find($this->attributes['class_room_id'])->number;
-        
-    //     $max_rand = 1000000000;
-
-    //     do
-    //         $code = $max_rand*$class+rand(0, $max_rand);
-    //     while($model->where('code', $code)->count() > 0);
-
-    //     $this->attributes['code'] = $code;
-    // }
-
     public function setImageAttribute($value)
     {
         $attribute_name = "image";

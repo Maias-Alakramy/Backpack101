@@ -25,8 +25,8 @@ class StudentFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'image' => $this->faker->word,
-            'class_room_id' => ClassRoom::factory(),
+            'image' =>  $this->faker->image('public/images/students',100,100, null, false) ,
+            'code' => rand(0,999999999)
         ];
     }
 }
