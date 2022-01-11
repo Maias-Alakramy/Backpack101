@@ -130,6 +130,7 @@ class StudentCrudController extends CrudController
     }
     public function store(StudentRequest $request)
     {
+        $this->crud->hasAccessOrFail('create');
         $model = \App\Models\Student::all();
         $student = new \App\Models\Student();
         $class = \App\Models\ClassRoom::find($request->class_room_id)->number;
@@ -145,5 +146,16 @@ class StudentCrudController extends CrudController
         $this->crud->getRequest()->request->add(['code' => $code]);		
             
         return $this->traitStore();
+    }
+
+    public function destroy($id)
+    {
+        $this->crud->hasAccessOrFail('delete');
+        //unlink the image and delet it
+        $student = \App\Models\Student::find($id);
+        if($student->image){
+            unlink(public_path('images/students/'.$student->image));
+        }
+        return $this->traitDestroy($id);
     }
 }

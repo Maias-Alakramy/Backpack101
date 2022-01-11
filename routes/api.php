@@ -21,3 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/', [StudentController::class,'index']);
 Route::get('/students/{code}', [StudentController::class,'show']);
+Route::get('/c',function(){return view('chart');});

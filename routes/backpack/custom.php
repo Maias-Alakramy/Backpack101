@@ -18,4 +18,5 @@ Route::group([
 ], function () { // custom admin routes
     Route::crud('class-room', 'ClassRoomCrudController');
     Route::crud('student', 'StudentCrudController');
+    Route::get('charts/student-per-class', 'Charts\StudentPerClassChartController@response')->name('charts.student-per-class.index');
 }); // this should be the absolute last line of this file
